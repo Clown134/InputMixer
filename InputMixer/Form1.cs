@@ -10,6 +10,10 @@ using System.Runtime.Remoting.Channels;
 using System.Windows.Forms;
 using InputMixer.Properties;
 using System.Drawing;
+using Microsoft.Win32;
+using System.IO; // это для работы с файлами
+using System.Xml.Serialization; //это для сохранения классов — что и есть серилизация
+using System.Collections;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -40,15 +44,57 @@ namespace InputMixer
             notifyIcon1.ContextMenu = new ContextMenu(
             new[]
             {
-                new MenuItem("Show form", (s, e) => Show()),
-                new MenuItem("Hide form", (s, e) => Hide()),
-                new MenuItem("Exit", (s, e) => {notifyIcon1.Dispose(); Environment.Exit(0);} ),
+                new MenuItem("Show form", (s, e) => 
+                {
+                    Show();
+                    ShowInTaskbar = true;
+                    if (сохранитьПоложениеToolStripMenuItem.Checked == false)
+                        this.Location = new Point(Screen.PrimaryScreen.Bounds.Size.Width - this.Width, Screen.PrimaryScreen.Bounds.Size.Height - this.Height - 40);
+                }),
+                new MenuItem("Hide form", (s, e) => 
+                {
+                    Hide(); ShowInTaskbar = false; 
+                }),
+                new MenuItem("Exit", (s, e) => 
+                {
+                    saveSettings saveSettings = new saveSettings();
+                    saveSettings.isTop = поверхДругихОконToolStripMenuItem.Checked;
+                    saveSettings.isAutoload = toolStripMenuItem1.Checked;
+                    saveSettings.isSaveloc = сохранитьПоложениеToolStripMenuItem.Checked;
+                    using (Stream writer = new FileStream("program.xml", FileMode.Create))
+                    {
+                       XmlSerializer serializer = new XmlSerializer(typeof(saveSettings));
+                       serializer.Serialize(writer, saveSettings);
+                    }
+                    notifyIcon1.Dispose();
+                    Environment.Exit(0);
+                }),
             }) ;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Hide();
+            // загружаем данные из файла program.xml
+            try
+            {
+                using (Stream stream = new FileStream("program.xml", FileMode.Open))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(saveSettings));
+
+                    // в тут же созданную объект класса saveSettings под именем saveSettings
+                    saveSettings saveSettings = (saveSettings)serializer.Deserialize(stream);
+
+                    toolStripMenuItem1.Checked = saveSettings.isAutoload;
+                    поверхДругихОконToolStripMenuItem.Checked = saveSettings.isTop;
+                    сохранитьПоложениеToolStripMenuItem.Checked = saveSettings.isSaveloc;
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
+                this.Hide();
             this.ShowInTaskbar = false;
             if (WaveIn.DeviceCount == 0)
             {
@@ -64,6 +110,13 @@ namespace InputMixer
             }
             ScanSoundCards();
             SetTrackBars();
+        }
+
+        public class saveSettings
+        {
+            public bool isTop;
+            public bool isAutoload;
+            public bool isSaveloc;
         }
 
         private void ListsAdd()
@@ -120,10 +173,9 @@ namespace InputMixer
         {
             for (int i = 0; i < WaveIn.DeviceCount; i++)
             {
-                labels[i].Text = WaveIn.GetCapabilities(i).ProductName;
-                labels[i].Visible = true;
-                trackBarList[i].Visible = true;
-                checkBoxes[i].Visible = true;
+                string name = WaveIn.GetCapabilities(i).ProductName;
+                int pos = name.IndexOf('(');
+                labels[i].Text = name.Substring(0, pos);
             }
         }
 
@@ -176,8 +228,10 @@ namespace InputMixer
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            //WindowState = FormWindowState.Normal;
+            if (сохранитьПоложениеToolStripMenuItem.Checked == false)
+                this.Location = new Point(Screen.PrimaryScreen.Bounds.Size.Width - this.Width, Screen.PrimaryScreen.Bounds.Size.Height - this.Height - 40);
             Show();
+            ShowInTaskbar = true;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -185,6 +239,57 @@ namespace InputMixer
             Hide();
             this.ShowInTaskbar = false;
             e.Cancel = true;
+        }
+
+        private void toolStripMenuItem1_CheckedChanged(object sender, EventArgs e) //Запускать вместе с Windows
+        {
+            if (toolStripMenuItem1.Checked)
+            {
+                // Путь к ключу где винда смотрит настройки автозапуска
+                RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+                // Добавить значение в реестр для запуска напару с ОС
+                rkApp.SetValue("InputMixer", Application.ExecutablePath.ToString());
+            }
+            else
+            {
+                RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+                // Удаляем
+                rkApp.DeleteValue("InputMixer", false);
+            }
+        }
+
+        private void поверхДругихОконToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (поверхДругихОконToolStripMenuItem.Checked)
+                TopMost = true;
+            else
+                TopMost = false;
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (toolStripMenuItem1.Checked)
+                toolStripMenuItem1.Checked = false;
+            else
+                toolStripMenuItem1.Checked = true;
+        }
+
+        private void поверхДругихОконToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (поверхДругихОконToolStripMenuItem.Checked)
+                поверхДругихОконToolStripMenuItem.Checked = false;
+            else
+                поверхДругихОконToolStripMenuItem .Checked = true;
+        }
+
+        private void сохранитьПоложениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (сохранитьПоложениеToolStripMenuItem.Checked)
+                сохранитьПоложениеToolStripMenuItem.Checked = false;
+            else
+                сохранитьПоложениеToolStripMenuItem.Checked = true;
         }
     }
 }

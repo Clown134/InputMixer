@@ -35,31 +35,35 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.поверхДругихОконToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьПоложениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // trackBar1
             // 
             this.trackBar1.AllowDrop = true;
-            this.trackBar1.Location = new System.Drawing.Point(12, 36);
+            this.trackBar1.Location = new System.Drawing.Point(12, 50);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(213, 45);
             this.trackBar1.TabIndex = 1;
             this.trackBar1.Tag = "0";
             this.trackBar1.Value = 100;
-            this.trackBar1.Visible = false;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 20);
+            this.label1.Location = new System.Drawing.Point(12, 34);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
-            this.label1.Visible = false;
             // 
             // notifyIcon1
             // 
@@ -71,7 +75,7 @@
             // textBox1
             // 
             this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox1.Location = new System.Drawing.Point(230, 10);
+            this.textBox1.Location = new System.Drawing.Point(230, 24);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(38, 20);
@@ -84,14 +88,56 @@
             this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBox1.AutoSize = true;
             this.checkBox1.Image = global::InputMixer.Properties.Resources.VolumePic;
-            this.checkBox1.Location = new System.Drawing.Point(230, 36);
+            this.checkBox1.Location = new System.Drawing.Point(230, 50);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(38, 38);
             this.checkBox1.TabIndex = 13;
             this.checkBox1.Tag = "0";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.Visible = false;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.настройкиToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(634, 24);
+            this.menuStrip1.TabIndex = 15;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // настройкиToolStripMenuItem
+            // 
+            this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.поверхДругихОконToolStripMenuItem,
+            this.сохранитьПоложениеToolStripMenuItem});
+            this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.настройкиToolStripMenuItem.Text = "Настройки";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(231, 22);
+            this.toolStripMenuItem1.Text = "Запускать вместе с Windows";
+            this.toolStripMenuItem1.CheckedChanged += new System.EventHandler(this.toolStripMenuItem1_CheckedChanged);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // поверхДругихОконToolStripMenuItem
+            // 
+            this.поверхДругихОконToolStripMenuItem.Name = "поверхДругихОконToolStripMenuItem";
+            this.поверхДругихОконToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.поверхДругихОконToolStripMenuItem.Text = "Поверх других окон";
+            this.поверхДругихОконToolStripMenuItem.CheckedChanged += new System.EventHandler(this.поверхДругихОконToolStripMenuItem_CheckedChanged);
+            this.поверхДругихОконToolStripMenuItem.Click += new System.EventHandler(this.поверхДругихОконToolStripMenuItem_Click);
+            // 
+            // сохранитьПоложениеToolStripMenuItem
+            // 
+            this.сохранитьПоложениеToolStripMenuItem.Name = "сохранитьПоложениеToolStripMenuItem";
+            this.сохранитьПоложениеToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.сохранитьПоложениеToolStripMenuItem.Text = "Сохранить положение";
+            this.сохранитьПоложениеToolStripMenuItem.Click += new System.EventHandler(this.сохранитьПоложениеToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -102,17 +148,20 @@
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Микшер ввода";
-            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,6 +173,11 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem поверхДругихОконToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьПоложениеToolStripMenuItem;
     }
 }
 
