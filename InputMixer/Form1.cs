@@ -89,7 +89,7 @@ namespace InputMixer
                     сохранитьПоложениеToolStripMenuItem.Checked = saveSettings.isSaveloc;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 
             }
